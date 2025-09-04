@@ -1,0 +1,12 @@
+# Robots.txt for Sidiqi Global Group
+# Allow all search engines and crawlers to access the site
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://www.sidiqiglobal.com/sitemap.xml
+
+# Optional: Block access to admin or private areas (if you add any in the future)
+# Disallow: /admin/
+# Disallow: /api/private/
