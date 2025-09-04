@@ -1,0 +1,10 @@
+<svg width="120" height="32" viewBox="0 0 120 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple, clean logo placeholder for Sidiqi Global Group -->
+  <rect x="0" y="8" width="24" height="16" rx="2" fill="#026296"/>
+  <rect x="6" y="12" width="12" height="2" fill="#FFFFFF"/>
+  <rect x="6" y="16" width="8" height="2" fill="#FFFFFF"/>
+  
+  <!-- Company name text -->
+  <text x="32" y="14" fill="#0C0C0C" font-family="Outfit, sans-serif" font-size="10" font-weight="600">SIDIQI</text>
+  <text x="32" y="24" fill="#4C4C4D" font-family="Outfit, sans-serif" font-size="8" font-weight="500">GLOBAL GROUP</text>
+</svg>
