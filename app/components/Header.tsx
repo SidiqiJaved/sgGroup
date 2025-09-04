@@ -1,32 +1,46 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useState, useEffect, useRef } from 'react'
 import Logo from './Logo'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const menuRef = useRef<HTMLDivElement>(null)
 
-  // Close menu when clicking outside
+  // Close mobile menu when clicking outside
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMenuOpen && !(event.target as Element).closest('header')) {
         setIsMenuOpen(false)
       }
     }
 
-    if (isMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [isMenuOpen])
 
+  // Close mobile menu on escape key
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isMenuOpen) {
+        setIsMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('keydown', handleEscapeKey)
+    return () => document.removeEventListener('keydown', handleEscapeKey)
+  }, [isMenuOpen])
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+    setIsMenuOpen(false)
+  }
+
   return (
-    <header className="bg-white border-b border-gray-100 relative z-50" role="banner" ref={menuRef}>
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100" role="banner">
       <div className="max-w-[1120px] mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -46,31 +60,23 @@ export default function Header() {
             >
               Home
             </Link>
-            <Link 
-              href="#about"
+            <button
+              onClick={() => scrollToSection('about')}
               className="text-brand-grey hover:text-brand-blue transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 rounded px-2 py-1"
-              onClick={(e) => {
-                e.preventDefault()
-                const aboutSection = document.getElementById('about')
-                if (aboutSection) {
-                  aboutSection.scrollIntoView({ behavior: 'smooth' })
-                }
-              }}
             >
               About
-            </Link>
-            <Link 
-              href="#businesses"
+            </button>
+            <button
+              onClick={() => scrollToSection('businesses')}
               className="text-brand-grey hover:text-brand-blue transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 rounded px-2 py-1"
-              onClick={(e) => {
-                e.preventDefault()
-                const businessSection = document.getElementById('businesses')
-                if (businessSection) {
-                  businessSection.scrollIntoView({ behavior: 'smooth' })
-                }
-              }}
             >
               Businesses
+            </button>
+            <Link 
+              href="/contact"
+              className="text-brand-grey hover:text-brand-blue transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 rounded px-2 py-1"
+            >
+              Contact
             </Link>
           </nav>
 
@@ -92,51 +98,42 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Menu */}
         {isMenuOpen && (
           <div 
-            id="mobile-menu"
-            className="sm:hidden absolute top-full left-0 right-0 bg-white border-t border-gray-100 shadow-lg z-40"
+            id="mobile-menu" 
+            className="lg:hidden py-4 border-t border-gray-100 bg-white"
+            role="navigation"
+            aria-label="Mobile navigation"
           >
-            <nav className="py-4 px-6" role="navigation" aria-label="Mobile navigation">
-              <div className="flex flex-col space-y-4">
-                <Link 
-                  href="/"
-                  className="text-brand-grey hover:text-brand-blue transition-colors text-sm font-medium py-2 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 rounded"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Home
-                </Link>
-                <Link 
-                  href="#about"
-                  className="text-brand-grey hover:text-brand-blue transition-colors text-sm font-medium py-2 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 rounded"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    setIsMenuOpen(false)
-                    const aboutSection = document.getElementById('about')
-                    if (aboutSection) {
-                      aboutSection.scrollIntoView({ behavior: 'smooth' })
-                    }
-                  }}
-                >
-                  About
-                </Link>
-                <Link 
-                  href="#businesses"
-                  className="text-brand-grey hover:text-brand-blue transition-colors text-sm font-medium py-2 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 rounded"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    setIsMenuOpen(false)
-                    const businessSection = document.getElementById('businesses')
-                    if (businessSection) {
-                      businessSection.scrollIntoView({ behavior: 'smooth' })
-                    }
-                  }}
-                >
-                  Businesses
-                </Link>
-              </div>
-            </nav>
+            <div className="flex flex-col space-y-2">
+              <Link 
+                href="/"
+                className="block px-4 py-2 text-brand-grey hover:text-brand-blue hover:bg-gray-50 transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Home
+              </Link>
+              <button
+                onClick={() => scrollToSection('about')}
+                className="block text-left px-4 py-2 text-brand-grey hover:text-brand-blue hover:bg-gray-50 transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 w-full"
+              >
+                About
+              </button>
+              <button
+                onClick={() => scrollToSection('businesses')}
+                className="block text-left px-4 py-2 text-brand-grey hover:text-brand-blue hover:bg-gray-50 transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 w-full"
+              >
+                Businesses
+              </button>
+              <Link 
+                href="/contact"
+                className="block px-4 py-2 text-brand-grey hover:text-brand-blue hover:bg-gray-50 transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contact
+              </Link>
+            </div>
           </div>
         )}
       </div>

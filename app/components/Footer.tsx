@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -15,6 +16,7 @@ export default function Footer() {
               width={24}
               height={24}
               className="opacity-60"
+              loading="lazy"
             />
             <p className="text-brand-grey text-sm">
               © {currentYear} Sidiqi Global Group
@@ -23,18 +25,18 @@ export default function Footer() {
           
           {/* Right side - Links */}
           <nav className="flex items-center gap-6" aria-label="Footer navigation">
-            <a
+            <Link
               href="/contact"
               className="text-brand-grey hover:text-brand-blue transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 rounded px-2 py-1"
             >
               Contact
-            </a>
-            <a
+            </Link>
+            <Link
               href="/privacy"
               className="text-brand-grey hover:text-brand-blue transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 rounded px-2 py-1"
             >
               Privacy
-            </a>
+            </Link>
           </nav>
         </div>
       </div>
