@@ -1,6 +1,32 @@
+'use client'
+
 import Header from './components/Header'
 import Footer from './components/Footer'
 import LinkTile from './components/LinkTile'
+
+// Analytics tracking function
+const trackCTA = (eventName: string) => {
+  if (typeof window !== 'undefined') {
+    // Google Analytics 4 tracking
+    if (window.gtag) {
+      window.gtag('event', 'click', {
+        event_category: 'cta',
+        event_label: eventName,
+        value: 1,
+      })
+    }
+    
+    // Console log for debugging
+    console.log(`CTA clicked: ${eventName}`)
+  }
+}
+
+// Extend Window interface for TypeScript
+declare global {
+  interface Window {
+    gtag: (...args: any[]) => void
+  }
+}
 
 export default function HomePage() {
   return (
@@ -9,7 +35,7 @@ export default function HomePage() {
       
       <main id="main-content" className="flex-1" role="main">
         {/* Hero Section */}
-        <section className="py-16 md:py-24" aria-labelledby="hero-heading">
+        <section id="home" className="py-16 md:py-24" aria-labelledby="hero-heading">
           <div className="max-w-[1120px] mx-auto px-6">
             <div className="text-center max-w-3xl mx-auto">
               <h1 
@@ -28,7 +54,8 @@ export default function HomePage() {
                   href="https://sg2tech.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center px-8 py-3 bg-brand-blue text-white font-semibold rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 transition-all duration-200 min-w-[200px]"
+                  onClick={() => trackCTA('sg2tech_cta')}
+                  className="inline-flex items-center justify-center px-8 py-3 bg-brand-blue text-white font-semibold rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 transition-all duration-200 min-w-[200px] hover:shadow-lg transform hover:scale-105"
                   aria-label="Explore SG2 Technologies (opens in new tab)"
                 >
                   Explore SG2 Technologies
@@ -40,7 +67,8 @@ export default function HomePage() {
                   href="https://sidiqi.ai"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center px-8 py-3 border-2 border-brand-blue text-brand-blue font-semibold rounded-lg hover:bg-brand-blue hover:text-white focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 transition-all duration-200 min-w-[200px]"
+                  onClick={() => trackCTA('sidiqiai_cta')}
+                  className="inline-flex items-center justify-center px-8 py-3 border-2 border-brand-blue text-brand-blue font-semibold rounded-lg hover:bg-brand-blue hover:text-white focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 transition-all duration-200 min-w-[200px] hover:shadow-lg transform hover:scale-105"
                   aria-label="Visit Sidiqi.ai AI Venture (opens in new tab)"
                 >
                   Visit Sidiqi.ai
@@ -80,32 +108,28 @@ export default function HomePage() {
         {/* About Section */}
         <section id="about" className="py-16 md:py-20" aria-labelledby="about-heading">
           <div className="max-w-[1120px] mx-auto px-6">
-            <div className="max-w-4xl mx-auto text-center">
+            <div className="text-center max-w-4xl mx-auto">
               <h2 
                 id="about-heading"
                 className="text-3xl md:text-4xl font-bold text-brand-ink mb-8"
               >
                 About Sidiqi Global Group
               </h2>
-              <div className="text-lg text-brand-grey space-y-6 leading-relaxed">
-                <p>
-                  We are a strategic holding company that identifies, develops, and invests in forward-thinking 
-                  ventures across technology and innovation sectors. Our approach combines deep industry 
-                  expertise with patient capital to build sustainable, market-leading businesses.
-                </p>
-                <p>
-                  Led by Javed Sidiqi, Founder & CEO — learn more at{' '}
-                  <a
-                    href="https://sidiqi.ai"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-brand-blue hover:text-brand-blueLight transition-colors focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 rounded"
-                    aria-label="Learn more about Javed Sidiqi on Sidiqi.ai (opens in new tab)"
-                  >
-                    Sidiqi.ai
-                  </a>
-                </p>
-              </div>
+              <p className="text-lg text-brand-grey leading-relaxed mb-6">
+                We are a strategic holding company that identifies, develops, and invests in forward-thinking ventures across technology and innovation sectors.
+                Our approach combines deep industry expertise with patient capital to build sustainable, market-leading businesses.
+              </p>
+              <p className="text-base text-brand-grey leading-relaxed">
+                Led by Javed Sidiqi, Founder & CEO — learn more at{' '}
+                <a 
+                  href="https://sidiqi.ai" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-brand-blue hover:text-brand-blueLight underline focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 rounded"
+                >
+                  Sidiqi.ai
+                </a>
+              </p>
             </div>
           </div>
         </section>
